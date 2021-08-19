@@ -4,7 +4,7 @@
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
+The package can be installed
 by adding `app_store` to your list of dependencies in `mix.exs`:
 
 ```elixir
@@ -14,10 +14,6 @@ def deps do
   ]
 end
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/app_store](https://hexdocs.pm/app_store).
 
 ## Usage
 
@@ -46,3 +42,5 @@ app_store =
 ```
 
 Now you can use functions in `AppStore.API` module to interact with the App Store Server APIs.
+
+Please check [https://hexdocs.pm/app_store](https://hexdocs.pm/app_store) for a full documentation.
