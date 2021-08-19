@@ -9,12 +9,15 @@ defmodule AppStore.MixProject do
       app: :app_store,
       version: @version,
       elixir: "~> 1.12",
+      elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       name: "App Store Server API",
       description: "A thin App Store Server API Client",
       source_url: @url,
-      homepage_url: @url
+      homepage_url: @url,
+      package: package(),
+      docs: docs()
     ]
   end
 
@@ -26,6 +29,9 @@ defmodule AppStore.MixProject do
     ]
   end
 
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
+
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
@@ -33,11 +39,39 @@ defmodule AppStore.MixProject do
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
 
       # runtime deps
-      {:finch, "~> 0.6", optional: true},
-      {:jason, "~> 1.0", optional: true},
+      {:finch, "~> 0.6"},
+      {:jason, "~> 1.0"},
 
       # doc
-      {:ex_doc, "~> 0.14", only: [:dev, :docs]}
+      {:ex_doc, "~> 0.14", only: [:dev, :docs]},
+
+      # test
+      {:bypass, "~> 2.1", only: :test}
+    ]
+  end
+
+  defp package do
+    [
+      name: :app_store,
+      files: ["lib", "mix.exs", "README*", "LICENSE"],
+      maintainers: ["Jun Lin"],
+      licenses: ["MIT"],
+      links: %{
+        "GitHub" => @url
+      }
+    ]
+  end
+
+  defp docs do
+    [
+      groups_for_modules: [
+        "HTTP Client": [
+          ~r"AppStore.HTTPClient"
+        ],
+        JSON: [
+          ~r"AppStore.JSON"
+        ]
+      ]
     ]
   end
 end
