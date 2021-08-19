@@ -12,7 +12,7 @@ defmodule AppStore.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      name: "App Store Server API",
+      name: "App Store",
       description: "A thin App Store Server API Client",
       source_url: @url,
       homepage_url: @url,
@@ -43,7 +43,7 @@ defmodule AppStore.MixProject do
       {:jason, "~> 1.0"},
 
       # doc
-      {:ex_doc, "~> 0.14", only: [:dev, :docs]},
+      {:ex_doc, "~> 0.24", only: :dev, runtime: false},
 
       # test
       {:bypass, "~> 2.1", only: :test}
@@ -64,6 +64,8 @@ defmodule AppStore.MixProject do
 
   defp docs do
     [
+      main: "readme",
+      extras: ["README.md"],
       groups_for_modules: [
         "HTTP Client": [
           ~r"AppStore.HTTPClient"
