@@ -1,6 +1,6 @@
-# AppStore
+# App Store Server API
 
-**TODO: Add description**
+[App Store Server API](https://developer.apple.com/documentation/appstoreserverapi) client.
 
 ## Installation
 
@@ -18,4 +18,3 @@ end
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/app_store](https://hexdocs.pm/app_store).
-
