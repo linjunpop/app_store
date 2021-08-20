@@ -24,3 +24,6 @@ app_store-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+# Editor
+.vscode
