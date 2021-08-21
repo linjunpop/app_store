@@ -42,6 +42,12 @@ defmodule AppStore.MixProject do
       {:finch, "~> 0.6"},
       {:jason, "~> 1.0"},
 
+      # JWT
+      {:joken, "~> 2.0"},
+
+      # NanoID
+      {:nanoid, "~> 2.0.5"},
+
       # doc
       {:ex_doc, "~> 0.24", only: :dev, runtime: false},
 
@@ -67,6 +73,12 @@ defmodule AppStore.MixProject do
       main: "readme",
       extras: ["README.md"],
       groups_for_modules: [
+        Token: [
+          ~r"AppStore.Token"
+        ],
+        API: [
+          ~r"AppStore.API"
+        ],
         "HTTP Client": [
           ~r"AppStore.HTTPClient"
         ],
