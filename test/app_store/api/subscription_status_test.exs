@@ -11,7 +11,7 @@ defmodule AppStore.API.SubscriptionStatusTest do
         |> Plug.Conn.resp(401, "Unauthenticated\n\nRequest ID: PXYVB35MOBBC5TL6UOXY6DGJGY.0.0\n")
       end)
 
-      {:ok, %AppStore.Response{body: body, status: status}} =
+      {:ok, %AppStore.API.Response{body: body, status: status}} =
         SubscriptionStatus.get_subscription_statuses(
           app_store.api_config,
           "token",

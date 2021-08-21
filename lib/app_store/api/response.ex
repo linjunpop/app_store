@@ -1,4 +1,4 @@
-defmodule AppStore.Response do
+defmodule AppStore.API.Response do
   @moduledoc """
   The struct representing the response from API.
   """

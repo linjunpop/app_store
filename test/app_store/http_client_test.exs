@@ -3,17 +3,23 @@ defmodule AppStore.HTTPClientTest do
 
   describe "get/3" do
     test "Get history", %{bypass: bypass, app_store: app_store} do
-      Bypass.expect_once(bypass, "GET", "/", fn conn ->
+      Bypass.expect_once(bypass, "GET", "/test", fn conn ->
         conn
         |> Plug.Conn.put_resp_header("server", "daiquiri/3.0.0")
-        |> Plug.Conn.resp(401, "Unauthenticated\n\nRequest ID: PXYVB35MOBBC5TL6UOXY6DGJGY.0.0\n")
+        |> Plug.Conn.resp(200, "text")
       end)
 
-      {:ok, %AppStore.Response{body: body, status: status}} =
-        AppStore.HTTPClient.get(app_store.api_config, "token", "/")
+      {:ok, %{body: body, status: status}} =
+        AppStore.HTTPClient.perform_request(
+          app_store.api_config.http_client,
+          :get,
+          URI.encode("http://127.0.0.1:#{bypass.port}/test"),
+          nil,
+          []
+        )
 
-      assert status === 401
-      assert body === "Unauthenticated\n\nRequest ID: PXYVB35MOBBC5TL6UOXY6DGJGY.0.0\n"
+      assert status === 200
+      assert body === "text"
     end
   end
 end

@@ -19,7 +19,7 @@ defmodule AppStore.API.ConsumptionInformationTest do
         end
       )
 
-      {:ok, %AppStore.Response{body: body, status: status}} =
+      {:ok, %AppStore.API.Response{body: body, status: status}} =
         ConsumptionInformation.send_consumption_information(
           app_store.api_config,
           "token",

@@ -1,4 +1,4 @@
-defmodule AppStore.Error do
+defmodule AppStore.API.Error do
   @moduledoc """
   The struct representing the error from the API.
   """

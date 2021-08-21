@@ -3,8 +3,7 @@ defmodule AppStore.API.ConsumptionInformation do
   The module for Consumption Information
   """
 
-  alias AppStore.HTTPClient
-  alias AppStore.API.Config
+  alias AppStore.API.{Config, Error, Response, HTTP}
 
   @type original_transaction_id :: String.t()
 
@@ -16,11 +15,11 @@ defmodule AppStore.API.ConsumptionInformation do
   Official documentation: https://developer.apple.com/documentation/appstoreserverapi/send_consumption_information
   """
   @spec send_consumption_information(Config.t(), String.t(), original_transaction_id, map) ::
-          {:error, AppStore.Error.t()} | {:ok, AppStore.Response.t()}
+          {:error, Error.t()} | {:ok, Response.t()}
   def send_consumption_information(%Config{} = api_config, token, original_transaction_id, body)
       when is_map(body) do
     path = "#{@path_prefix}/#{original_transaction_id}"
 
-    HTTPClient.put(api_config, token, path, body)
+    HTTP.put(api_config, token, path, body)
   end
 end

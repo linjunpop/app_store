@@ -21,9 +21,6 @@ if Code.ensure_loaded?(Finch) do
     Or start it dynamically with `start_link/1`
     """
 
-    alias AppStore.Response
-    alias AppStore.Error
-
     @behaviour AppStore.HTTPClient
 
     @doc false
@@ -85,7 +82,7 @@ if Code.ensure_loaded?(Finch) do
 
       with {:ok, %Finch.Response{} = response} <- result do
         {:ok,
-         %Response{
+         %{
            status: response.status,
            headers: response.headers,
            body: response.body,
@@ -94,7 +91,7 @@ if Code.ensure_loaded?(Finch) do
       else
         {:error, error} ->
           {:error,
-           %Error{
+           %{
              code: :finch_error,
              detail: error
            }}

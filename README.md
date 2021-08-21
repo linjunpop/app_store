@@ -66,7 +66,7 @@ iex> token = AppStore.Token.generate_token(
 Get transactions history:
 
 ```elixir
-iex> {:ok, %AppStore.Response{body: body, status: status}} =
+iex> {:ok, %AppStore.API.Response{body: body, status: status}} =
   AppStore.API.get_transaction_history(
     app_store.api_config,
     token,

@@ -3,8 +3,7 @@ defmodule AppStore.API.TransactionHistory do
   The module for Transaction History
   """
 
-  alias AppStore.HTTPClient
-  alias AppStore.API.Config
+  alias AppStore.API.{Config, Response, Error, HTTP}
 
   @type original_transaction_id :: String.t()
   @type revision :: String.t() | nil
@@ -17,7 +16,7 @@ defmodule AppStore.API.TransactionHistory do
   Official documentation: https://developer.apple.com/documentation/appstoreserverapi/get_transaction_history
   """
   @spec get_transaction_history(Config.t(), String.t(), original_transaction_id, revision) ::
-          {:error, AppStore.Error.t()} | {:ok, AppStore.Response.t()}
+          {:error, Error.t()} | {:ok, Response.t()}
   def get_transaction_history(
         %Config{} = api_config,
         token,
@@ -34,7 +33,7 @@ defmodule AppStore.API.TransactionHistory do
   defp do_get_transaction_history(%Config{} = api_config, token, original_transaction_id, nil) do
     path = "#{@path_prefix}/#{original_transaction_id}"
 
-    HTTPClient.get(api_config, token, path)
+    HTTP.get(api_config, token, path)
   end
 
   defp do_get_transaction_history(
@@ -49,6 +48,6 @@ defmodule AppStore.API.TransactionHistory do
 
     path = "#{@path_prefix}/#{original_transaction_id}?#{query_string}"
 
-    HTTPClient.get(api_config, token, path)
+    HTTP.get(api_config, token, path)
   end
 end
