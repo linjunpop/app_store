@@ -68,8 +68,8 @@ if Code.ensure_loaded?(Finch) do
         [
           name: __MODULE__,
           pools: %{
-            AppStore.sandbox_server_url() => [size: 1],
-            AppStore.production_server_url() => [size: 10]
+            AppStore.API.Config.sandbox_server_url() => [size: 1],
+            AppStore.API.Config.production_server_url() => [size: 10]
           }
         ]
         |> Keyword.merge(opts)

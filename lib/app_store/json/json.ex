@@ -25,8 +25,12 @@ defmodule AppStore.JSON do
   ```elixir
   AppStore =
     AppStore.build(
-      signed_token: "xxx-yyy-xxx",
-      json_coder: MyApp.AwesomeJSONCoder
+      api: [
+        json_coder: MyApp.AwesomeJSONCoder
+      ],
+      token: [
+        json_coder: MyApp.AwesomeJSONCoder
+      ]
     )
   ```
 
@@ -37,12 +41,12 @@ defmodule AppStore.JSON do
   @callback decode!(String.t()) :: map()
 
   @doc false
-  def encode!(%AppStore{} = app_store, data) do
-    app_store.json_coder.encode!(data)
+  def encode!(json_coder, data) do
+    json_coder.encode!(data)
   end
 
   @doc false
-  def decode!(%AppStore{} = app_store, str) do
-    app_store.json_coder.decode!(str)
+  def decode!(json_coder, str) do
+    json_coder.decode!(str)
   end
 end

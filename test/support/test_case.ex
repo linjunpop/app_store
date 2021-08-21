@@ -15,8 +15,9 @@ defmodule AppStore.TestCase do
 
     app_store =
       AppStore.build(
-        signed_token: "the-signed-token",
-        server_url: "http://127.0.0.1:#{bypass.port}"
+        api: [
+          server_url: "http://127.0.0.1:#{bypass.port}"
+        ]
       )
 
     {:ok, bypass: bypass, app_store: app_store}

@@ -34,10 +34,11 @@ defmodule AppStore.HTTPClient do
   Then Use the custom HTTP while building the client:
 
   ```elixir
-  app_store_client =
+  app_store =
     AppStore.build(
-      signed_token: "xxx-yyy-xxx",
-      http_client: MyApp.AwesomeHTTPClient
+      api: [
+        http_client: MyApp.AwesomeHTTPClient
+      ]
     )
   ```
 
@@ -46,6 +47,7 @@ defmodule AppStore.HTTPClient do
 
   alias AppStore.Response
   alias AppStore.Error
+  alias AppStore.API.Config
 
   @type http_method :: :get | :put
   @type http_headers :: [{header_name :: String.t(), header_value :: String.t()}]
@@ -57,64 +59,66 @@ defmodule AppStore.HTTPClient do
               headers :: http_headers
             ) :: {:ok, Response.t()} | {:error, Error.t()}
 
-  @spec get(AppStore.t(), String.t()) ::
+  @spec get(Config.t(), String.t(), String.t()) ::
           {:error, AppStore.Error.t()} | {:ok, AppStore.Response.t()}
-  def get(app_store, path) do
-    perform_request(app_store, :get, path, nil)
+  def get(api_config, token, path) do
+    perform_request(api_config, token, :get, path, nil)
   end
 
-  @spec put(AppStore.t(), binary, nil | binary | map) ::
+  @spec put(Config.t(), String.t(), String.t(), nil | binary | map) ::
           {:error, AppStore.Error.t()} | {:ok, AppStore.Response.t()}
-  def put(app_store, path, body) do
-    perform_request(app_store, :put, path, body)
+  def put(api_config, token, path, body) do
+    perform_request(api_config, token, :put, path, body)
   end
 
   @spec perform_request(
-          AppStore.t(),
+          Config.t(),
+          String.t(),
           http_method,
           String.t(),
           nil | String.t() | map()
         ) :: {:ok, Response.t()} | {:error, Error.t()}
   @doc false
   def perform_request(
-        %AppStore{http_client: http_client} = app_store,
+        %Config{http_client: http_client, json_coder: json_coder, server_url: server_url},
+        token,
         method,
         path,
         body
       ) do
-    uri = build_uri(app_store, path)
-    body = format_body(app_store, body)
-    headers = build_headers(app_store)
+    uri = build_uri(server_url, path)
+    body = format_body(json_coder, body)
+    headers = build_headers(token)
 
     http_client.request(method, uri, body, headers)
   end
 
-  defp build_headers(%AppStore{signed_token: signed_token}) do
+  defp build_headers(token) do
     [
-      {"authorization", "Bearer #{signed_token}"},
+      {"authorization", "Bearer #{token}"},
       {"accept", "application/json"},
       {"content-type", "application/json"},
       {"user-agent", "Elixir:AppStore/#{AppStore.version()}"}
     ]
   end
 
-  defp build_uri(%AppStore{server_url: server_url}, path) do
+  defp build_uri(_server_url, path) when is_struct(path, URI) do
+    path
+  end
+
+  defp build_uri(server_url, path) do
     url = Path.join(server_url, path)
 
     URI.parse(url)
   end
 
-  defp build_uri(_app_store, path) when is_struct(path, URI) do
-    path
-  end
+  defp format_body(_, nil), do: ""
 
-  defp format_body(_app_store, nil), do: ""
-
-  defp format_body(_app_store, str) when is_binary(str) do
+  defp format_body(_, str) when is_binary(str) do
     str
   end
 
-  defp format_body(app_store, params) when is_map(params) do
-    AppStore.JSON.encode!(app_store, params)
+  defp format_body(json_coder, params) when is_map(params) do
+    AppStore.JSON.encode!(json_coder, params)
   end
 end

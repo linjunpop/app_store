@@ -3,17 +3,17 @@ defmodule AppStoreTest do
   # doctest AppStore
 
   test "build a client with default values" do
-    assert AppStore.build(signed_token: "123") == %AppStore{
-             http_client: AppStore.HTTPClient.DefaultClient,
-             json_coder: AppStore.JSON.DefaultCoder,
-             server_url: "https://api.storekit.itunes.apple.com",
-             signed_token: "123"
-           }
-  end
+    app_store = AppStore.build()
 
-  test "build a failed" do
-    assert_raise ArgumentError, ~r/Please specify the `signed_token`/, fn ->
-      AppStore.build([])
-    end
+    assert app_store == %AppStore{
+             api_config: %AppStore.API.Config{
+               http_client: AppStore.HTTPClient.DefaultClient,
+               json_coder: AppStore.JSON.DefaultCoder,
+               server_url: "https://api.storekit.itunes.apple.com"
+             },
+             token_config: %AppStore.Token.Config{
+               json_coder: AppStore.JSON.DefaultCoder
+             }
+           }
   end
 end

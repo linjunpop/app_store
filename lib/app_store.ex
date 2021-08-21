@@ -3,79 +3,87 @@ defmodule AppStore do
   [App Store Server API](https://developer.apple.com/documentation/appstoreserverapi) client.
   """
 
+  alias AppStore.{API, Token}
+
   @version "0.1.0"
 
-  @production_server_url "https://api.storekit.itunes.apple.com"
-  @sandbox_server_url "https://api.storekit-sandbox.itunes.apple.com"
+  @enforce_keys [:api_config, :token_config]
 
   defstruct [
-    :server_url,
-    :signed_token,
-    :http_client,
-    :json_coder
+    :api_config,
+    :token_config
   ]
 
   @type t :: %__MODULE__{
-          server_url: String.t(),
-          signed_token: String.t(),
-          http_client: module(),
-          json_coder: module()
+          api_config: API.Config.t(),
+          token_config: Token.Config.t()
         }
 
   @doc """
-  Build the AppStore client, used by functions in module `AppStore.API`
+  Build the `AppStore` struct.
 
   ## Options
 
-  - `signed_token`: Required, the Signed JWT Token. See [Generating Tokens for API Requests](https://developer.apple.com/documentation/appstoreserverapi/generating_tokens_for_api_requests) on how to generate one.
-  - `server_url`: Optional, the API server URL, default to the value of `AppStore.production_server_url/0`
-  - `http_client`: Optional, the module used to make HTTP calls, default to `AppStore.HTTPClient.DefaultClient`
-  - `json_coder`: Optional, the module used as JSON encoder & decoder, default to `AppStore.JSON.DefaultCoder`
+  - `api`: Optional, a keyword list to concsturct a `AppStore.API.Config`.
+    - `server_url`: Optional, the API server URL, default to the value of `AppStore.API.Config.production_server_url/0`
+    - `http_client`: Optional, the module used to make HTTP calls, default to `AppStore.HTTPClient.DefaultClient`
+    - `json_coder`: Optional, the module used as JSON encoder & decoder, default to `AppStore.JSON.DefaultCoder`
+  - `token`: Optional, a keyword list to options to construct a `AppStore.Token.Config`.
+    - `json_coder`: Optional, the module used as JSON encoder & decoder, default to `AppStore.JSON.DefaultCoder`
+
+  ## Example
+
+      iex> AppStore.build()
+      %AppStore{
+        api_config: %AppStore.API.Config{
+          http_client: AppStore.HTTPClient.DefaultClient,
+          json_coder: AppStore.JSON.DefaultCoder,
+          server_url: "https://api.storekit.itunes.apple.com"
+        },
+        token_config: %AppStore.Token.Config{
+          json_coder: AppStore.JSON.DefaultCoder
+        }
+      }
+
+      iex> AppStore.build([
+        api: [
+          http_client: YourHTTPClient,
+          json_coder: YourJSONCoder,
+          server_url: "https://api.storekit.itunes.apple.com"
+        ],
+        token: [
+          json_coder: YourJSONCoder
+        ]
+      ])
+      %AppStore{
+        api_config: %AppStore.API.Config{
+          http_client: YourHTTPClient,
+          json_coder: YourJSONCoder,
+          server_url: "https://api.storekit.itunes.apple.com"
+        },
+        token_config: %AppStore.Token.Config{
+          json_coder: YourJSONCoder
+        }
+      }
   """
-  @spec build(keyword) :: t()
-  def build([]), do: raise_missing_required_args()
-  def build(nil), do: raise_missing_required_args()
+  def build(opts \\ []) do
+    api_opts = Keyword.get(opts, :api, [])
+    token_opts = Keyword.get(opts, :token, [])
 
-  def build(opts) do
-    opts =
-      opts
-      |> Keyword.put_new(:server_url, production_server_url())
-      |> Keyword.put_new(:http_client, AppStore.HTTPClient.DefaultClient)
-      |> Keyword.put_new(:json_coder, AppStore.JSON.DefaultCoder)
+    api_config = API.Config.build(api_opts)
+    token_config = Token.Config.build(token_opts)
 
-    struct!(__MODULE__, opts)
+    struct!(__MODULE__,
+      api_config: api_config,
+      token_config: token_config
+    )
   end
 
-  @doc """
-  Returns the production API server URL: #{@production_server_url}
-  """
-  @spec production_server_url :: String.t()
-  def production_server_url do
-    @production_server_url
-  end
-
-  @doc """
-  Returns the sandbox API server URL: #{@sandbox_server_url}
-  """
-  @spec sandbox_server_url :: String.t()
-  def sandbox_server_url do
-    @sandbox_server_url
-  end
-
+  @spec version :: String.t()
   @doc """
   Get current app version
   """
   def version do
     @version
-  end
-
-  defp raise_missing_required_args do
-    raise ArgumentError, ~S"""
-    Please specify the `signed_token`.
-
-        iex> AppStore.build(signed_token: "xxx-yyy-xxx")
-
-    Check [Generating Tokens for API Requests](https://developer.apple.com/documentation/appstoreserverapi/generating_tokens_for_api_requests) on instructions to generate one.
-    """
   end
 end

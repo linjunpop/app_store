@@ -1,7 +1,7 @@
 defmodule AppStore.HTTPClientTest do
   use AppStore.TestCase, async: false
 
-  describe "get/2" do
+  describe "get/3" do
     test "Get history", %{bypass: bypass, app_store: app_store} do
       Bypass.expect_once(bypass, "GET", "/", fn conn ->
         conn
@@ -10,7 +10,7 @@ defmodule AppStore.HTTPClientTest do
       end)
 
       {:ok, %AppStore.Response{body: body, status: status}} =
-        AppStore.HTTPClient.get(app_store, "/")
+        AppStore.HTTPClient.get(app_store.api_config, "token", "/")
 
       assert status === 401
       assert body === "Unauthenticated\n\nRequest ID: PXYVB35MOBBC5TL6UOXY6DGJGY.0.0\n"

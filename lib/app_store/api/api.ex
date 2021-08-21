@@ -5,12 +5,17 @@ defmodule AppStore.API do
 
   alias AppStore.API.{TransactionHistory, SubscriptionStatus, ConsumptionInformation}
 
-  defdelegate get_transaction_history(app_store, original_transaction_id, revision \\ nil),
-    to: TransactionHistory
+  defdelegate get_transaction_history(
+                api_config,
+                token,
+                original_transaction_id,
+                revision \\ nil
+              ),
+              to: TransactionHistory
 
-  defdelegate get_subscription_statuses(app_store, original_transaction_id),
+  defdelegate get_subscription_statuses(api_config, token, original_transaction_id),
     to: SubscriptionStatus
 
-  defdelegate send_consumption_information(app_store, original_transaction_id, body),
+  defdelegate send_consumption_information(api_config, token, original_transaction_id, body),
     to: ConsumptionInformation
 end

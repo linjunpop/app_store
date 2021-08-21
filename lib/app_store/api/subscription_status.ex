@@ -4,6 +4,7 @@ defmodule AppStore.API.SubscriptionStatus do
   """
 
   alias AppStore.HTTPClient
+  alias AppStore.API.Config
 
   @type original_transaction_id :: String.t()
 
@@ -14,11 +15,11 @@ defmodule AppStore.API.SubscriptionStatus do
 
   Official documentation: https://developer.apple.com/documentation/appstoreserverapi/get_all_subscription_statuses
   """
-  @spec get_subscription_statuses(AppStore.t(), original_transaction_id) ::
+  @spec get_subscription_statuses(Config.t(), String.t(), original_transaction_id) ::
           {:error, AppStore.Error.t()} | {:ok, AppStore.Response.t()}
-  def get_subscription_statuses(%AppStore{} = app_store, original_transaction_id) do
+  def get_subscription_statuses(%Config{} = api_config, token, original_transaction_id) do
     path = "#{@path_prefix}/#{original_transaction_id}"
 
-    HTTPClient.get(app_store, path)
+    HTTPClient.get(api_config, token, path)
   end
 end
