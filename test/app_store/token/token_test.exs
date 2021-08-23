@@ -9,11 +9,11 @@ defmodule AppStore.TokenTest do
       key_id = "2X9R4HXF34"
 
       key_pem = ~s"""
-      -----BEGIN EC PRIVATE KEY-----
-      MHcCAQEEIBI3HVhGJaXtZ1OV35tiJspGntAnD6LdyTlb8CwqwK7loAoGCCqGSM49
-      AwEHoUQDQgAEuxbhw+SLqAfdNDYUpNLfXvUY+kCDF70EidKgBCC1mO5fTzIID2pv
-      ZZ5r50TSYbD984DqkGI+QTGzBoX04eBqeg==
-      -----END EC PRIVATE KEY-----
+      -----BEGIN PRIVATE KEY-----
+      MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgBN3rztoRWmc8v+yi
+      R6iigfMkLLWHko+/mn6mpYmwMi+hRANCAARGKbTQuKR4r3ohsAI8W+1PvQE6HwUB
+      xF8kf7wO9oSY0n7nCH/97UTON/HZTlsTycRNP7kbr6esvorsx4ZFtYSp
+      -----END PRIVATE KEY------
       """
 
       {:ok, token, claims} =

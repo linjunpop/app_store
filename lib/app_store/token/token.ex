@@ -1,6 +1,8 @@
 defmodule AppStore.Token do
   @moduledoc """
-  A module to geenrate the signed token.
+  A module to geenrate the signed token for API usage.
+
+  Please also check `AppStore.Token.Server` for a `GenServer` to cache
   """
 
   @type key :: %{id: String.t(), pem: String.t()}
