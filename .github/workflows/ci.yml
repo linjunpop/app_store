@@ -7,7 +7,7 @@ env:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     name: OTP ${{ matrix.otp }} - Elixir ${{ matrix.elixir }}
     env:
       MIX_ENV: "test"
@@ -16,11 +16,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        otp: ['23.3', '24.0']
-        elixir: ['1.12.1']
+        otp: ["23", "24", "25"]
+        elixir: ["1.13.4", "1.14.4"]
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup OTP and Elixir
         uses: erlef/setup-beam@v1
         with:
