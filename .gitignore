@@ -27,3 +27,6 @@ app_store-*.tar
 
 # Editor
 .vscode
+
+.tool-versions
+
