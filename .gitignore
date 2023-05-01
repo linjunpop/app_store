@@ -28,5 +28,6 @@ app_store-*.tar
 # Editor
 .vscode
 
-.tool-versions
+.elixir_ls
 
+.tool-versions

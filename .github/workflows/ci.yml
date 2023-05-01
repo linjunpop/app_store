@@ -16,8 +16,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        otp: ['23.3', '24.0']
-        elixir: ['1.12.1']
+        otp: ["23.3", "24.3", "25.3"]
+        elixir: ["1.13.4", "1.14.4"]
     steps:
       - name: Checkout source code
         uses: actions/checkout@v2
