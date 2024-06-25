@@ -1,7 +1,7 @@
 defmodule AppStore.MixProject do
   use Mix.Project
 
-  @version "0.1.0"
+  @version "0.2.0"
   @url "https://github.com/linjunpop/app_store"
 
   def project do
