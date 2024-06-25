@@ -21,17 +21,4 @@ defmodule AppStore.API.TransactionInfo do
 
     HTTP.get(api_config, token, path)
   end
-
-  @doc """
-  Decode the response body into a map.
-  The response contains one field known as `signedTransactionInfo` which is of type JWSTransaction.
-
-  Official documentation: https://developer.apple.com/documentation/appstoreserverapi/transactioninforesponse
-  """
-  @spec decode_response_body(Response.t()) :: map()
-  def decode_response_body(%Response{} = _response) do
-    # TODO Implement me!
-    decoded_body = %{}
-    {:ok, decoded_body}
-  end
 end
