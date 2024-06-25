@@ -1,13 +1,17 @@
 name: CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
 
 env:
   CACHE_VERSION: 1
 
 jobs:
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     name: OTP ${{ matrix.otp }} - Elixir ${{ matrix.elixir }}
     env:
       MIX_ENV: "test"
@@ -15,12 +19,19 @@ jobs:
       OTP_VERSION: ${{ matrix.otp }}
     strategy:
       fail-fast: false
+      # https://hexdocs.pm/elixir/1.17.0/compatibility-and-deprecations.html
       matrix:
-        otp: ["23", "24", "25"]
-        elixir: ["1.13.4", "1.14.4"]
+        otp: ["24", "25", "26"]
+        elixir: ["1.15.5", "1.16.3", "1.17.1"]
+        exclude:
+          - otp: "24"
+            elixir: "1.17.1"
+        include:
+          - otp: "27"
+            elixir: "1.17.1"
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup OTP and Elixir
         uses: erlef/setup-beam@v1
         with:

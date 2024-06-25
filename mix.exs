@@ -8,7 +8,7 @@ defmodule AppStore.MixProject do
     [
       app: :app_store,
       version: @version,
-      elixir: "~> 1.13",
+      elixir: "~> 1.15",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
