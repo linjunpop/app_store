@@ -45,9 +45,6 @@ defmodule AppStore.MixProject do
       # JWT
       {:joken, "~> 2.0"},
 
-      # NanoID
-      {:nanoid, "~> 2.0.5"},
-
       # doc
       {:ex_doc, "~> 0.24", only: :dev, runtime: false},
 
