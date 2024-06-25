@@ -9,7 +9,6 @@
 
 Initial release
 
-
 ## v0.2.0
 
 - Added a call to GET transaction info by transaction ID `AppStore.API.TransactionInfo`
