@@ -4,7 +4,7 @@
 
 ## v0.2.1
 
-- Remove unecessary slash from transaction_info call.
+- Remove unecessary slash from get_transaction_info call.
 
 ## v0.2.0
 
