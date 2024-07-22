@@ -2,6 +2,10 @@
 
 ## main
 
+## v0.2.1
+
+- Remove unecessary slash from transaction_info call.
+
 ## v0.2.0
 
 - Remove `nanoid` dependency.
