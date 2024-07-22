@@ -7,7 +7,7 @@ defmodule AppStore.API.TransactionInfo do
 
   @type transaction_id :: String.t()
 
-  @path_prefix "/inApps/v1/transactions/"
+  @path_prefix "/inApps/v1/transactions"
 
   @doc """
   Get information about a single transaction for your app.
