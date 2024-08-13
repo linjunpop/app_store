@@ -1,6 +1,6 @@
 defmodule AppStore.Token do
   @moduledoc """
-  A module to geenrate the signed token for API usage.
+  A module to generate the signed token for API usage.
 
   Please also check `AppStore.Token.Server` for a `GenServer` to cache
   """
