@@ -2,6 +2,10 @@
 
 ## main
 
+## v0.3.0
+
+- Add JWSValidation module to validate Apple's JSON Web Signature (JWS).
+
 ## v0.2.1
 
 - Remove unecessary slash from get_transaction_info call.
