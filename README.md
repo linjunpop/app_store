@@ -66,12 +66,21 @@ iex> token = AppStore.Token.generate_token(
 Get transactions history:
 
 ```elixir
-iex> {:ok, %AppStore.API.Response{body: body, status: status}} =
+iex> {:ok, %AppStore.API.Response{body: %{"signedTransactions" => signed_transactions} = body, status: status}} =
   AppStore.API.get_transaction_history(
     app_store.api_config,
     token,
     "the-transaction-id"
   )
+```
+
+Validate the response:
+
+```elixir
+iex>  [
+        {:ok, %JOSE.JWT{fields: %{"bundleId" => "com.example", "environment" => "Sandbox", "signedDate" => 1_672_956_154_000}}},
+        {:ok, %JOSE.JWT{fields: %{"bundleId" => "com.example2", "environment" => "Sandbox", "signedDate" => 1_672_956_154_000}}}
+      ] = JWSValidation.validate(signed_transactions)
 ```
 
 Please check [https://hexdocs.pm/app_store](https://hexdocs.pm/app_store) for a full documentation.

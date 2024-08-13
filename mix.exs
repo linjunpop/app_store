@@ -42,11 +42,15 @@ defmodule AppStore.MixProject do
       # JWT
       {:joken, "~> 2.0"},
 
+      # JWS
+      {:x509, "~> 0.8.9"},
+
       # doc
       {:ex_doc, "~> 0.24", only: :dev, runtime: false},
 
       # test
-      {:bypass, "~> 2.1", only: :test}
+      {:bypass, "~> 2.1", only: :test},
+      {:mock, "~> 0.3.8", only: :test}
     ]
   end
 
