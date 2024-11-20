@@ -74,9 +74,12 @@ defmodule AppStore.JWSValidation do
   def validate_certificate_chain(_, _), do: {:error, :invalid_cert_chain}
 
   defp get_jwk(leaf_cert) do
-    leaf_cert
-    |> X509.Certificate.from_der!()
-    |> X509.Certificate.public_key()
-    |> JOSE.JWK.from_key()
+    {:OTPCertificate,
+     {:OTPTBSCertificate, _, _, _, _, _, _,
+      {:OTPSubjectPublicKeyInfo, {:PublicKeyAlgorithm, _, {:namedCurve, _curve} = curve},
+       {:ECPoint, _ec_point} = ec_point}, _, _, _}, _,
+     _} = :public_key.pkix_decode_cert(leaf_cert, :otp)
+
+    JOSE.JWK.from_key({ec_point, curve})
   end
 end
