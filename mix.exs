@@ -1,7 +1,7 @@
 defmodule AppStore.MixProject do
   use Mix.Project
 
-  @version "0.2.1"
+  @version "0.3.0"
   @url "https://github.com/linjunpop/app_store"
 
   def project do
@@ -46,7 +46,8 @@ defmodule AppStore.MixProject do
       {:ex_doc, "~> 0.24", only: :dev, runtime: false},
 
       # test
-      {:bypass, "~> 2.1", only: :test}
+      {:bypass, "~> 2.1", only: :test},
+      {:mock, "~> 0.3.8", only: :test}
     ]
   end
 
