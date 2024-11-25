@@ -2,6 +2,10 @@
 
 ## main
 
+## v0.3.1
+
+- Move Public Apple Certificate to jws_validation directory.
+
 ## v0.3.0
 
 - Add JWSValidation module to validate Apple's JSON Web Signature (JWS).
