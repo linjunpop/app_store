@@ -4,7 +4,7 @@ defmodule AppStore.JWSValidation do
   """
 
   # Apple Root CA G3 public certificate available at https://www.apple.com/certificateauthority/
-  @apple_root_cert File.read!(Path.join(File.cwd!(), "/priv/certs/AppleRootCA-G3.cer"))
+  @apple_root_cert File.read!(Path.join(__DIR__, "certs/AppleRootCA-G3.cer"))
 
   @doc """
   Validate the signed payload from Apple.
