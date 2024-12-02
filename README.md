@@ -80,7 +80,7 @@ Validate the response:
 iex>  [
         {:ok, %JOSE.JWT{fields: %{"bundleId" => "com.example", "environment" => "Sandbox", "signedDate" => 1_672_956_154_000}}},
         {:ok, %JOSE.JWT{fields: %{"bundleId" => "com.example2", "environment" => "Sandbox", "signedDate" => 1_672_956_154_000}}}
-      ] = JWSValidation.validate(signed_transactions)
+      ] = AppStore.JWSValidation.validate(signed_transactions)
 ```
 
 Please check [https://hexdocs.pm/app_store](https://hexdocs.pm/app_store) for a full documentation.
