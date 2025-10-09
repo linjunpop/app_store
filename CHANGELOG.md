@@ -2,7 +2,7 @@
 
 ## main
 
-## v0.3.x
+## v0.4.0
 
 - Added Test Notification endpoint support: `AppStore.API.TestNotification`.
 

@@ -10,7 +10,7 @@ by adding `app_store` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:app_store, "~> 0.2.1"}
+    {:app_store, "~> 0.4.0"}
   ]
 end
 ```
