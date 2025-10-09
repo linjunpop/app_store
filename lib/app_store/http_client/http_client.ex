@@ -46,7 +46,7 @@ defmodule AppStore.HTTPClient do
   See `AppStore.HTTPClient.DefaultClient` for a reference implementation.
   """
 
-  @type http_method :: :get | :put
+  @type http_method :: :get | :put | :post
   @type http_headers :: [{header_name :: String.t(), header_value :: String.t()}]
   @type http_response :: %{
           data: map(),

@@ -51,7 +51,7 @@ iex> app_store = AppStore.build()
 Generate a token:
 
 ```elixir
-iex> token = AppStore.Token.generate_token(
+iex> {:ok, token, payload_map} = AppStore.Token.generate_token(
   "57246542-96fe-1a63-e053-0824d011072a",
   "com.example.testbundleid2021",
   %{

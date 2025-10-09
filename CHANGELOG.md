@@ -2,6 +2,10 @@
 
 ## main
 
+## v0.3.x
+
+- Added Test Notification endpoint support: `AppStore.API.TestNotification`.
+
 ## v0.3.1
 
 - Move Public Apple Certificate to jws_validation directory.

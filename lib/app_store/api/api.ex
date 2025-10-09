@@ -7,7 +7,8 @@ defmodule AppStore.API do
     TransactionHistory,
     TransactionInfo,
     SubscriptionStatus,
-    ConsumptionInformation
+    ConsumptionInformation,
+    TestNotification
   }
 
   defdelegate get_transaction_history(
@@ -26,4 +27,10 @@ defmodule AppStore.API do
 
   defdelegate send_consumption_information(api_config, token, original_transaction_id, body),
     to: ConsumptionInformation
+
+  defdelegate send_test_notification(api_config, body),
+    to: TestNotification
+
+  defdelegate get_test_notification_status(api_config, token, test_notification_token),
+    to: TestNotification
 end
