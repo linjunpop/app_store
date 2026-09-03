@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - main 
+      - main
   pull_request:
 
 env:
@@ -19,16 +19,27 @@ jobs:
       OTP_VERSION: ${{ matrix.otp }}
     strategy:
       fail-fast: false
-      # https://hexdocs.pm/elixir/1.17.0/compatibility-and-deprecations.html
+      # https://elixir.hexdocs.pm/compatibility-and-deprecations.html
       matrix:
-        otp: ["24", "25", "26"]
-        elixir: ["1.15.5", "1.16.3", "1.17.1"]
-        exclude:
-          - otp: "24"
-            elixir: "1.17.1"
         include:
+          - otp: "25"
+            elixir: "1.18.4"
+          - otp: "26"
+            elixir: "1.18.4"
           - otp: "27"
-            elixir: "1.17.1"
+            elixir: "1.18.4"
+          - otp: "26"
+            elixir: "1.19.4"
+          - otp: "27"
+            elixir: "1.19.4"
+          - otp: "28"
+            elixir: "1.19.4"
+          - otp: "27"
+            elixir: "1.20.4"
+          - otp: "28"
+            elixir: "1.20.4"
+          - otp: "29"
+            elixir: "1.20.4"
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4
