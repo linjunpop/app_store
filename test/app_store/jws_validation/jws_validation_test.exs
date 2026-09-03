@@ -1,16 +1,18 @@
 defmodule AppStore.JWSValidationTest do
-  use AppStore.TestCase, async: false
+  use ExUnit.Case, async: true
 
-  import Mock
+  import Mox
 
   alias AppStore.JWSValidation
 
+  Mox.defmock(AppStore.JWSValidationMock, for: AppStore.JWSValidation)
+
   describe "validate/2" do
-    test_with_mock "returns success for a valid JWS",
-                   %{},
-                   AppStore.JWSValidation,
-                   [:passthrough],
-                   validate_certificate_chain: fn cert_chain -> {:ok, cert_chain} end do
+    test "returns success for a valid JWS" do
+      expect(AppStore.JWSValidationMock, :validate_certificate_chain, fn cert_chain ->
+        {:ok, cert_chain}
+      end)
+
       assert {:ok,
               %JOSE.JWT{
                 fields: %{
@@ -18,14 +20,15 @@ defmodule AppStore.JWSValidationTest do
                   "environment" => "Sandbox",
                   "signedDate" => 1_672_956_154_000
                 }
-              }} == JWSValidation.validate(apple_jws_response_v2())
+              }} ==
+               JWSValidation.validate(apple_jws_response_v2(), AppStore.JWSValidationMock)
     end
 
-    test_with_mock "returns success for a valid list of JWS",
-                   %{},
-                   AppStore.JWSValidation,
-                   [:passthrough],
-                   validate_certificate_chain: fn cert_chain -> {:ok, cert_chain} end do
+    test "returns success for a valid list of JWS" do
+      expect(AppStore.JWSValidationMock, :validate_certificate_chain, 2, fn cert_chain ->
+        {:ok, cert_chain}
+      end)
+
       assert [
                {:ok,
                 %JOSE.JWT{
@@ -43,7 +46,11 @@ defmodule AppStore.JWSValidationTest do
                     "signedDate" => 1_672_956_154_000
                   }
                 }}
-             ] == JWSValidation.validate([apple_jws_response_v2(), apple_jws_response_v2()])
+             ] ==
+               JWSValidation.validate(
+                 [apple_jws_response_v2(), apple_jws_response_v2()],
+                 AppStore.JWSValidationMock
+               )
     end
 
     test "returns error for an invalid JWS header" do
@@ -57,31 +64,33 @@ defmodule AppStore.JWSValidationTest do
     end
 
     test "returns error for a JWS with invalid signature" do
-      with_mocks([
-        {AppStore.JWSValidation, [:passthrough],
-         validate_certificate_chain: fn cert_chain -> {:ok, cert_chain} end},
-        {JOSE.JWT, [:passthrough], verify: fn _jwk, _jws -> {false, %JOSE.JWT{}, %JOSE.JWS{}} end}
-      ]) do
-        assert {:error, :invalid_signature} == JWSValidation.validate(apple_jws_response_v2())
-      end
+      expect(AppStore.JWSValidationMock, :validate_certificate_chain, fn cert_chain ->
+        {:ok, cert_chain}
+      end)
+
+      [header, payload, signature] = String.split(apple_jws_response_v2(), ".")
+      signature_tail = binary_part(signature, 1, byte_size(signature) - 1)
+      invalid_signature = Enum.join([header, payload, "Q" <> signature_tail], ".")
+
+      assert {:error, :invalid_signature} ==
+               JWSValidation.validate(invalid_signature, AppStore.JWSValidationMock)
     end
 
     test "returns error when certificate chain validation fails" do
-      with_mock JWSValidation, [:passthrough],
-        validate_certificate_chain: fn _cert_chain -> {:error, :invalid_cert_chain} end do
-        assert {:error, :invalid_cert_chain} == JWSValidation.validate(apple_jws_response_v2())
-      end
+      expect(AppStore.JWSValidationMock, :validate_certificate_chain, fn _cert_chain ->
+        {:error, :invalid_cert_chain}
+      end)
+
+      assert {:error, :invalid_cert_chain} ==
+               JWSValidation.validate(apple_jws_response_v2(), AppStore.JWSValidationMock)
     end
 
     test "returns error when JWS is nil" do
       assert {:error, :invalid_jws} == JWSValidation.validate(nil)
     end
 
-    test "returns error when jws header has a incorrect cert chain" do
-      jws_header = %{
-        "alg" => "ES256",
-        "x5c" => ["wrong_leaf, wrong_raw, wrong_root"]
-      }
+    test "returns error when JWS header has an incorrect certificate chain" do
+      jws_header = %{"alg" => "ES256", "x5c" => ["wrong_leaf, wrong_raw, wrong_root"]}
 
       assert {:error, :invalid_jws} ==
                JOSE.JWK.generate_key({:ec, :secp256r1})
@@ -104,7 +113,8 @@ defmodule AppStore.JWSValidationTest do
     end
 
     test "returns error for an invalid certificate chain", %{cert_chain: cert_chain} do
-      assert {:error, :invalid_cert_chain} == JWSValidation.validate_certificate_chain(cert_chain)
+      assert {:error, :invalid_cert_chain} ==
+               JWSValidation.validate_certificate_chain(cert_chain)
     end
 
     test "returns error when an incomplete certificate chain is provided", %{

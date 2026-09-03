@@ -36,18 +36,18 @@ defmodule AppStore.MixProject do
   defp deps do
     [
       # runtime deps
-      {:finch, "~> 0.6"},
-      {:jason, "~> 1.0"},
+      {:finch, "~> 0.23"},
+      {:jason, "~> 1.4"},
 
       # JWT
-      {:joken, "~> 2.0"},
+      {:joken, "~> 2.7"},
 
       # doc
-      {:ex_doc, "~> 0.24", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.40", only: :dev, runtime: false},
 
       # test
       {:bypass, "~> 2.1", only: :test},
-      {:mock, "~> 0.3.8", only: :test}
+      {:mox, "~> 1.1", only: :test}
     ]
   end
 

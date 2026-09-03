@@ -3,6 +3,9 @@ defmodule AppStore.JWSValidation do
   A module to validate the JWS from Apple.
   """
 
+  @callback validate_certificate_chain([binary()]) ::
+              {:ok, term()} | {:error, :invalid_cert_chain}
+
   # Apple Root CA G3 public certificate available at https://www.apple.com/certificateauthority/
   @apple_root_cert File.read!(Path.join(__DIR__, "certs/AppleRootCA-G3.cer"))
 
@@ -31,10 +34,12 @@ defmodule AppStore.JWSValidation do
         {:ok, %JOSE.JWT{fields: %{"bundleId" => "com.example2", "environment" => "Sandbox", "signedDate" => 1_672_956_154_000}}}
       ]
   """
-  @spec validate(String.t() | list()) :: {:error, atom} | {:ok, %JOSE.JWT{}}
-  def validate(signed_payload) when is_binary(signed_payload) do
+  @spec validate(String.t() | list(), module()) :: {:error, atom} | {:ok, %JOSE.JWT{}}
+  def validate(signed_payload, certificate_validator \\ __MODULE__)
+
+  def validate(signed_payload, certificate_validator) when is_binary(signed_payload) do
     with {:ok, [leaf_cert | _] = cert_chain} <- get_binary_cert_chain(signed_payload),
-         {:ok, _pk_info} <- __MODULE__.validate_certificate_chain(cert_chain),
+         {:ok, _pk_info} <- certificate_validator.validate_certificate_chain(cert_chain),
          {true, jwt, _jws} <- JOSE.JWT.verify(get_jwk(leaf_cert), signed_payload) do
       {:ok, jwt}
     else
@@ -43,11 +48,11 @@ defmodule AppStore.JWSValidation do
     end
   end
 
-  def validate(signed_payloads) when is_list(signed_payloads) do
-    Enum.map(signed_payloads, &validate/1)
+  def validate(signed_payloads, certificate_validator) when is_list(signed_payloads) do
+    Enum.map(signed_payloads, &validate(&1, certificate_validator))
   end
 
-  def validate(_), do: {:error, :invalid_jws}
+  def validate(_, _), do: {:error, :invalid_jws}
 
   def get_binary_cert_chain(signed_payload) do
     with header <- JOSE.JWS.peek_protected(signed_payload),
@@ -77,8 +82,8 @@ defmodule AppStore.JWSValidation do
     {:OTPCertificate,
      {:OTPTBSCertificate, _, _, _, _, _, _,
       {:OTPSubjectPublicKeyInfo, {:PublicKeyAlgorithm, _, {:namedCurve, _curve} = curve},
-       {:ECPoint, _ec_point} = ec_point}, _, _, _}, _,
-     _} = :public_key.pkix_decode_cert(leaf_cert, :otp)
+       {:ECPoint, _ec_point} = ec_point}, _, _, _}, _, _} =
+      :public_key.pkix_decode_cert(leaf_cert, :otp)
 
     JOSE.JWK.from_key({ec_point, curve})
   end
