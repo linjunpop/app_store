@@ -22,12 +22,6 @@ jobs:
       # https://elixir.hexdocs.pm/compatibility-and-deprecations.html
       matrix:
         include:
-          - otp: "25"
-            elixir: "1.18.4"
-          - otp: "26"
-            elixir: "1.18.4"
-          - otp: "27"
-            elixir: "1.18.4"
           - otp: "26"
             elixir: "1.19.4"
           - otp: "27"
