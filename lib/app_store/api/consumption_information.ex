@@ -7,12 +7,13 @@ defmodule AppStore.API.ConsumptionInformation do
 
   @type original_transaction_id :: String.t()
 
-  @path_prefix "/inApps/v1/transactions/consumption"
+  @path_prefix "/inApps/v2/transactions/consumption"
 
   @doc """
-  Send consumption information about a consumable in-app purchase to the App Store, after your server receives a consumption request notification.
+  Send consumption information about a consumable in-app purchase, or auto-renewable
+  subscription, to the App Store after your server receives a consumption request notification.
 
-  Official documentation: https://developer.apple.com/documentation/appstoreserverapi/send_consumption_information
+  Official documentation: https://developer.apple.com/documentation/appstoreserverapi/send-consumption-information-v1
   """
   @spec send_consumption_information(Config.t(), String.t(), original_transaction_id, map) ::
           {:error, Error.t()} | {:ok, Response.t()}

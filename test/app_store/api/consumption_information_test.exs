@@ -3,12 +3,12 @@ defmodule AppStore.API.ConsumptionInformationTest do
 
   alias AppStore.API.ConsumptionInformation
 
-  describe "get_transaction_history/3" do
-    test "Get a history of transactions", %{bypass: bypass, app_store: app_store} do
+  describe "send_consumption_information/4" do
+    test "sends consumption information", %{bypass: bypass, app_store: app_store} do
       Bypass.expect_once(
         bypass,
         "PUT",
-        "/inApps/v1/transactions/consumption/the-transactin-id",
+        "/inApps/v2/transactions/consumption/the-transaction-id",
         fn conn ->
           conn
           |> Plug.Conn.put_resp_header("server", "daiquiri/3.0.0")
@@ -23,7 +23,7 @@ defmodule AppStore.API.ConsumptionInformationTest do
         ConsumptionInformation.send_consumption_information(
           app_store.api_config,
           "token",
-          "the-transactin-id",
+          "the-transaction-id",
           %{}
         )
 

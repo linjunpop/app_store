@@ -67,7 +67,7 @@ defmodule AppStore.Token.Server do
 
   @doc """
   Generate a signed token and cache it for 59 minutes
-  per the suggestion on Apple's documentation: [Generating Tokens for API Requests](https://developer.apple.com/documentation/appstoreserverapi/generating_tokens_for_api_requests)
+  per the suggestion on Apple's documentation: [Generating Tokens for API Requests](https://developer.apple.com/documentation/appstoreserverapi/generating-json-web-tokens-for-api-requests)
 
   ## Example
       iex> AppStore.Token.Server.generate(server)

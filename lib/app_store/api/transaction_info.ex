@@ -12,7 +12,7 @@ defmodule AppStore.API.TransactionInfo do
   @doc """
   Get information about a single transaction for your app.
 
-  Official documentation: https://developer.apple.com/documentation/appstoreserverapi/get_transaction_info
+  Official documentation: https://developer.apple.com/documentation/appstoreserverapi/get-transaction-info
   """
   @spec get_transaction_info(Config.t(), String.t(), transaction_id) ::
           {:error, Error.t()} | {:ok, Response.t()}

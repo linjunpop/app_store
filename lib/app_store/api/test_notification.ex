@@ -14,7 +14,7 @@ defmodule AppStore.API.TestNotification do
   """
   @spec send_test_notification(Config.t(), String.t()) ::
           {:error, Error.t()} | {:ok, Response.t()}
-  def send_test_notification(%Config{} = api_config, token)  do
+  def send_test_notification(%Config{} = api_config, token) do
     HTTP.post(api_config, token, @path_prefix)
   end
 

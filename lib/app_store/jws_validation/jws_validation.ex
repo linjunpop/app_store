@@ -10,6 +10,12 @@ defmodule AppStore.JWSValidation do
   @apple_root_cert File.read!(Path.join(__DIR__, "certs/AppleRootCA-G3.cer"))
 
   @doc """
+  The DER-encoded Apple Root CA - G3 certificate bundled with this library.
+  """
+  @spec default_root_certificate :: binary()
+  def default_root_certificate, do: @apple_root_cert
+
+  @doc """
   Validate the signed payload from Apple.
 
   Official documentation: [JWS Transaction

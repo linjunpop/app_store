@@ -15,7 +15,7 @@ defmodule AppStore.Token do
   Generate the token for API Requests
 
   Official documentation: [Generating Tokens for API Requests
-  ](https://developer.apple.com/documentation/appstoreserverapi/generating_tokens_for_api_requests)
+  ](https://developer.apple.com/documentation/appstoreserverapi/generating-json-web-tokens-for-api-requests)
 
   ## Options
 
@@ -24,7 +24,7 @@ defmodule AppStore.Token do
   - `key`: a map with the Key ID and Private key
     - `id`: Your private key ID from App Store Connect
     - `pem`: Your private API key generated from App Store Connect, please check [Creating API Keys to Use With the App Store Server API
-  ](https://developer.apple.com/documentation/appstoreserverapi/creating_api_keys_to_use_with_the_app_store_server_api)
+  ](https://developer.apple.com/documentation/appstoreserverapi/creating-api-keys-to-authorize-api-requests)
 
   ## Example
 

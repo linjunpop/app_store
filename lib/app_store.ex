@@ -5,7 +5,7 @@ defmodule AppStore do
 
   alias AppStore.{API, Token}
 
-  @version "0.3.1"
+  @version "0.5.0"
 
   @enforce_keys [:api_config, :token_config]
 
