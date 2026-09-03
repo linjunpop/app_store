@@ -1,6 +1,13 @@
 defmodule AppStore do
   @moduledoc """
-  [App Store Server API](https://developer.apple.com/documentation/appstoreserverapi) client.
+  Client configuration for the [App Store Server API](https://developer.apple.com/documentation/appstoreserverapi).
+
+  Build this struct once to obtain API and token configuration. Use
+  `AppStore.API` for server API calls, `AppStore.Token` for App Store Connect
+  API tokens, and `AppStore.SignedDataVerifier` for signed App Store data.
+
+  See the [Getting Started](getting-started.html) guide for a complete first
+  request.
   """
 
   alias AppStore.{API, Token}
@@ -24,7 +31,7 @@ defmodule AppStore do
 
   ## Options
 
-  - `api`: Optional, a keyword list to concsturct a `AppStore.API.Config`.
+  - `api`: Optional, a keyword list to construct an `AppStore.API.Config`.
     - `server_url`: Optional, the API server URL, default to the value of `AppStore.API.Config.production_server_url/0`
     - `http_client`: Optional, the module used to make HTTP calls, default to `AppStore.HTTPClient.DefaultClient`
     - `json_coder`: Optional, the module used as JSON encoder & decoder, default to `AppStore.JSON.DefaultCoder`
@@ -81,7 +88,7 @@ defmodule AppStore do
 
   @spec version :: String.t()
   @doc """
-  Get current app version
+  Returns the current library version.
   """
   def version do
     @version

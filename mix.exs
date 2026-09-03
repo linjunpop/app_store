@@ -54,7 +54,7 @@ defmodule AppStore.MixProject do
   defp package do
     [
       name: :app_store,
-      files: ["lib", "mix.exs", "README*", "LICENSE"],
+      files: ["lib", "guides", "mix.exs", "README*", "LICENSE"],
       maintainers: ["Jun Lin"],
       licenses: ["MIT"],
       links: %{
@@ -66,13 +66,34 @@ defmodule AppStore.MixProject do
   defp docs do
     [
       main: "readme",
-      extras: ["README.md"],
+      extras: [
+        "README.md",
+        "guides/getting-started.md",
+        "guides/server-notifications.md",
+        "guides/signed-data-verification.md",
+        "guides/error-handling.md",
+        "guides/customizing-clients.md"
+      ],
+      groups_for_extras: [
+        Guides: ~r"^guides/"
+      ],
       groups_for_modules: [
-        Token: [
-          ~r"AppStore.Token"
+        "Core Configuration": [
+          AppStore,
+          ~r"^AppStore.API.(Config|Response|Error)$"
         ],
-        API: [
-          ~r"AppStore.API"
+        "API Client": [
+          AppStore.API,
+          ~r"^AppStore.API.(?!Config$|Response$|Error$)"
+        ],
+        "Signed Data & Notifications": [
+          AppStore.ServerNotifications,
+          ~r"^AppStore.SignedDataVerifier",
+          AppStore.JWSValidation
+        ],
+        "Request Signing": [
+          ~r"^AppStore.Token",
+          ~r"^AppStore.SignatureCreator"
         ],
         "HTTP Client": [
           ~r"AppStore.HTTPClient"

@@ -1,6 +1,17 @@
 defmodule AppStore.API do
   @moduledoc """
-  The main module to interact with the App Store Server APIs
+  The primary facade for the App Store Server API.
+
+  Each function accepts an `AppStore.API.Config` and a generated App Store
+  Connect API token. Successful calls return `{:ok, %AppStore.API.Response{}}`;
+  unsuccessful calls return `{:error, %AppStore.API.Error{}}`.
+
+  Functions are organized by endpoint family in their implementation modules:
+  transaction history and details, subscriptions, consumption, notifications,
+  order and refund lookup, retention messaging, and performance testing.
+
+  See the [Getting Started](getting-started.html) and
+  [Error Handling](error-handling.html) guides for common call patterns.
   """
 
   alias AppStore.API.{

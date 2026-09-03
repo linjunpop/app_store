@@ -13,6 +13,9 @@ defmodule AppStore.SignedDataVerifier do
 
       {:ok, %JOSE.JWT{fields: transaction}} =
         AppStore.SignedDataVerifier.verify_and_decode_transaction(config, signed_transaction_info)
+
+        For verification environment requirements and local-testing behavior, see
+        the [Signed Data Verification](signed-data-verification.html) guide.
   """
 
   alias AppStore.JWSValidation

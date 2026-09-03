@@ -1,11 +1,10 @@
 # App Store
 
-[App Store Server API](https://developer.apple.com/documentation/appstoreserverapi) client.
+An Elixir client for the [App Store Server API](https://developer.apple.com/documentation/appstoreserverapi).
 
 ## Installation
 
-The package can be installed
-by adding `app_store` to your list of dependencies in `mix.exs`:
+Add `app_store` to your application's dependencies:
 
 ```elixir
 def deps do
@@ -15,72 +14,70 @@ def deps do
 end
 ```
 
-## Usage
+## Quick Start
 
-Add the default HTTP client `AppStore.HTTPClient.DefaultClient` to the application's supervision tree:
+Start the default HTTP client under your application's supervisor:
 
 ```elixir
-# lib/your_app/application.ex
-def start(_type, _args) do
-  children = [
-    ...
-    {AppStore.HTTPClient.DefaultClient, []}
-  ]
-
-  ...
-end
+children = [
+  {AppStore.HTTPClient.DefaultClient, []}
+]
 ```
 
-Build the client:
+Build the client, generate an App Store Connect API token, and call an endpoint:
 
 ```elixir
-iex> app_store = AppStore.build()
+app_store = AppStore.build()
 
-%AppStore{
-  api_config: %AppStore.API.Config{
-    http_client: AppStore.HTTPClient.DefaultClient,
-    json_coder: AppStore.JSON.DefaultCoder,
-    server_url: "https://api.storekit.itunes.apple.com"
-  },
-  token_config: %AppStore.Token.Config{
-    json_coder: AppStore.JSON.DefaultCoder
-  }
-}
-```
+{:ok, token, _claims} =
+  AppStore.Token.generate_token(
+    System.fetch_env!("APP_STORE_ISSUER_ID"),
+    "com.example.app",
+    %{
+      id: System.fetch_env!("APP_STORE_KEY_ID"),
+      pem: System.fetch_env!("APP_STORE_PRIVATE_KEY")
+    }
+  )
 
-Generate a token:
-
-```elixir
-iex> {:ok, token, payload_map} = AppStore.Token.generate_token(
-  "57246542-96fe-1a63-e053-0824d011072a",
-  "com.example.testbundleid2021",
-  %{
-    id: "2X9R4HXF34",
-    pem: "-----BEGIN PRIVATE KEY----- ..."
-  }
-)
-
-"eyJhbGciOiJFUzI1NiIsImtpZCI6IjJYOVI0SFhGMzQiLCJ0eXAiOiJKV1QifQ.eyJhdWQiOiJhcHBzdG9yZWNvbm5lY3QtdjEiLCJiaWQiOiJjb20uZXhhbXBsZS50ZXN0YnVuZGxlaWQyMDIxIiwiZXhwIjoxNjI5NTA2MjQwLCJpYXQiOjE2Mjk1MDI3MDAsImlzcyI6IjU3MjQ2NTQyLTk2ZmUtMWE2My1lMDUzLTA4MjRkMDExMDcyYSIsIm5vbmNlIjoiMnFlaWc0a2wxOTQ0aHFhbmVzMDAwMGMxIn0.gYa_A7J6a6UAyBTAohf4gj28jT0k-OX1CW8cwsVGb4EewEm3owdsv6iWvzt7SutCndCBg5hPfNFWuZ0Au20HxA"
-```
-
-Get transactions history:
-
-```elixir
-iex> {:ok, %AppStore.API.Response{body: %{"signedTransactions" => signed_transactions} = body, status: status}} =
+{:ok, %AppStore.API.Response{body: body, status: 200}} =
   AppStore.API.get_transaction_history(
     app_store.api_config,
     token,
-    "the-transaction-id"
+    "original-transaction-id"
   )
+
+signed_transactions = body["signedTransactions"]
 ```
 
-Validate the response:
+API calls return `{:ok, %AppStore.API.Response{}}` or
+`{:error, %AppStore.API.Error{}}`. Signed responses should be verified before
+their purchase data is used.
+
+## Server Notifications
+
+Use the framework-neutral notification decoder with the unmodified HTTP request
+body received from Apple:
 
 ```elixir
-iex>  [
-        {:ok, %JOSE.JWT{fields: %{"bundleId" => "com.example", "environment" => "Sandbox", "signedDate" => 1_672_956_154_000}}},
-        {:ok, %JOSE.JWT{fields: %{"bundleId" => "com.example2", "environment" => "Sandbox", "signedDate" => 1_672_956_154_000}}}
-      ] = AppStore.JWSValidation.validate(signed_transactions)
+config =
+  AppStore.SignedDataVerifier.Config.build(
+    environment: "Production",
+    bundle_id: "com.example.app",
+    app_apple_id: 123_456_789
+  )
+
+{:ok, notification} = AppStore.ServerNotifications.decode(config, request_body)
 ```
 
-Please check [https://hexdocs.pm/app_store](https://hexdocs.pm/app_store) for a full documentation.
+The decoder verifies the outer notification and any nested signed transaction
+or renewal data.
+
+## Guides
+
+- [Getting started](https://hexdocs.pm/app_store/getting-started.html)
+- [Server notifications](https://hexdocs.pm/app_store/server-notifications.html)
+- [Signed data verification](https://hexdocs.pm/app_store/signed-data-verification.html)
+- [Error handling](https://hexdocs.pm/app_store/error-handling.html)
+- [Customizing clients](https://hexdocs.pm/app_store/customizing-clients.html)
+
+See the complete [HexDocs API reference](https://hexdocs.pm/app_store).

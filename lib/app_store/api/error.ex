@@ -1,6 +1,13 @@
 defmodule AppStore.API.Error do
   @moduledoc """
-  The struct representing the error from the API.
+  Represents an unsuccessful App Store Server API request.
+
+  API facade calls return this struct in `{:error, error}` tuples. `code`
+  identifies the client or server failure category; `detail` contains the
+  underlying response information supplied by the configured HTTP client.
+
+  See the [Error Handling](error-handling.html) guide for pattern matching and
+  retry guidance.
   """
 
   @enforce_keys [:code, :detail]
