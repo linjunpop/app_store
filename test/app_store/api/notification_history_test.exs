@@ -7,9 +7,9 @@ defmodule AppStore.API.NotificationHistoryTest do
     test "gets notification history without pagination", %{bypass: bypass, app_store: app_store} do
       expected_body = %{notificationHistory: [], hasMore: false} |> Jason.encode!()
 
-      Bypass.expect_once(bypass, "POST", "/inApps/v1/notifications/history", fn conn ->
+      Passby.expect_once(bypass, "POST", "/inApps/v1/notifications/history", fn conn ->
         assert conn.query_string === ""
-        Plug.Conn.resp(conn, 200, expected_body)
+        Passby.Conn.resp(conn, 200, expected_body)
       end)
 
       {:ok, %AppStore.API.Response{body: body, status: status}} =
@@ -30,9 +30,9 @@ defmodule AppStore.API.NotificationHistoryTest do
     } do
       expected_body = %{notificationHistory: [], hasMore: true} |> Jason.encode!()
 
-      Bypass.expect_once(bypass, "POST", "/inApps/v1/notifications/history", fn conn ->
+      Passby.expect_once(bypass, "POST", "/inApps/v1/notifications/history", fn conn ->
         assert conn.query_string === "paginationToken=token123"
-        Plug.Conn.resp(conn, 200, expected_body)
+        Passby.Conn.resp(conn, 200, expected_body)
       end)
 
       {:ok, %AppStore.API.Response{body: body, status: status}} =

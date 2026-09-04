@@ -7,8 +7,8 @@ defmodule AppStore.API.OrderLookupTest do
     test "looks up an order id", %{bypass: bypass, app_store: app_store} do
       expected_body = %{status: 0, signedTransactions: []} |> Jason.encode!()
 
-      Bypass.expect_once(bypass, "GET", "/inApps/v1/lookup/the-order-id", fn conn ->
-        Plug.Conn.resp(conn, 200, expected_body)
+      Passby.expect_once(bypass, "GET", "/inApps/v1/lookup/the-order-id", fn conn ->
+        Passby.Conn.resp(conn, 200, expected_body)
       end)
 
       {:ok, %AppStore.API.Response{body: body, status: status}} =

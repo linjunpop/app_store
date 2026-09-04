@@ -5,11 +5,11 @@ defmodule AppStore.API.AppAccountTokenTest do
 
   describe "set_app_account_token/4" do
     test "sets the app account token", %{bypass: bypass, app_store: app_store} do
-      Bypass.expect_once(
+      Passby.expect_once(
         bypass,
         "PUT",
         "/inApps/v1/transactions/the-transaction-id/appAccountToken",
-        fn conn -> Plug.Conn.resp(conn, 200, "") end
+        fn conn -> Passby.Conn.resp(conn, 200, "") end
       )
 
       {:ok, %AppStore.API.Response{status: status}} =

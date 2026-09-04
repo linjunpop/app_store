@@ -9,9 +9,7 @@ defmodule AppStore.TestCase do
   end
 
   setup _tags do
-    AppStore.HTTPClient.DefaultClient.start_link(pool_size: 2)
-
-    bypass = Bypass.open()
+    bypass = Passby.open()
 
     app_store =
       AppStore.build(

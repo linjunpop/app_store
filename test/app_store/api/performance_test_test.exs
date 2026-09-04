@@ -7,8 +7,8 @@ defmodule AppStore.API.PerformanceTestTest do
     test "initiates a performance test", %{bypass: bypass, app_store: app_store} do
       expected_body = %{requestIdentifier: "req-id"} |> Jason.encode!()
 
-      Bypass.expect_once(bypass, "POST", "/inApps/v1/messaging/performanceTest", fn conn ->
-        Plug.Conn.resp(conn, 200, expected_body)
+      Passby.expect_once(bypass, "POST", "/inApps/v1/messaging/performanceTest", fn conn ->
+        Passby.Conn.resp(conn, 200, expected_body)
       end)
 
       {:ok, %AppStore.API.Response{body: body, status: status}} =
@@ -25,11 +25,11 @@ defmodule AppStore.API.PerformanceTestTest do
     test "gets performance test results", %{bypass: bypass, app_store: app_store} do
       expected_body = %{requestIdentifier: "req-id", status: "COMPLETE"} |> Jason.encode!()
 
-      Bypass.expect_once(
+      Passby.expect_once(
         bypass,
         "GET",
         "/inApps/v1/messaging/performanceTest/result/req-id",
-        fn conn -> Plug.Conn.resp(conn, 200, expected_body) end
+        fn conn -> Passby.Conn.resp(conn, 200, expected_body) end
       )
 
       {:ok, %AppStore.API.Response{body: body, status: status}} =

@@ -5,11 +5,11 @@ defmodule AppStore.API.TransactionFinishTest do
 
   describe "finish_transaction/3" do
     test "finishes a transaction", %{bypass: bypass, app_store: app_store} do
-      Bypass.expect_once(
+      Passby.expect_once(
         bypass,
         "POST",
         "/inApps/v1/transactions/the-transaction-id/finish",
-        fn conn -> Plug.Conn.resp(conn, 200, "") end
+        fn conn -> Passby.Conn.resp(conn, 200, "") end
       )
 
       {:ok, %AppStore.API.Response{status: status}} =

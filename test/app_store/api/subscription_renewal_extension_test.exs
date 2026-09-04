@@ -7,12 +7,12 @@ defmodule AppStore.API.SubscriptionRenewalExtensionTest do
     test "extends a single subscription's renewal date", %{bypass: bypass, app_store: app_store} do
       expected_body = %{effectiveDate: 1, success: true} |> Jason.encode!()
 
-      Bypass.expect_once(
+      Passby.expect_once(
         bypass,
         "PUT",
         "/inApps/v1/subscriptions/extend/the-transaction-id",
         fn conn ->
-          Plug.Conn.resp(conn, 200, expected_body)
+          Passby.Conn.resp(conn, 200, expected_body)
         end
       )
 
@@ -36,8 +36,8 @@ defmodule AppStore.API.SubscriptionRenewalExtensionTest do
     } do
       expected_body = %{requestIdentifier: "req-id"} |> Jason.encode!()
 
-      Bypass.expect_once(bypass, "POST", "/inApps/v1/subscriptions/extend/mass", fn conn ->
-        Plug.Conn.resp(conn, 200, expected_body)
+      Passby.expect_once(bypass, "POST", "/inApps/v1/subscriptions/extend/mass", fn conn ->
+        Passby.Conn.resp(conn, 200, expected_body)
       end)
 
       {:ok, %AppStore.API.Response{body: body, status: status}} =
@@ -61,11 +61,11 @@ defmodule AppStore.API.SubscriptionRenewalExtensionTest do
     test "gets the mass extension status", %{bypass: bypass, app_store: app_store} do
       expected_body = %{requestIdentifier: "req-id", complete: true} |> Jason.encode!()
 
-      Bypass.expect_once(
+      Passby.expect_once(
         bypass,
         "GET",
         "/inApps/v1/subscriptions/extend/mass/product/req-id",
-        fn conn -> Plug.Conn.resp(conn, 200, expected_body) end
+        fn conn -> Passby.Conn.resp(conn, 200, expected_body) end
       )
 
       {:ok, %AppStore.API.Response{body: body, status: status}} =

@@ -5,10 +5,10 @@ defmodule AppStore.API.TransactionHistoryTest do
 
   describe "get_transaction_history/3" do
     test "Get a history of transactions", %{bypass: bypass, app_store: app_store} do
-      Bypass.expect_once(bypass, "GET", "/inApps/v2/history/the-transaction-id", fn conn ->
+      Passby.expect_once(bypass, "GET", "/inApps/v2/history/the-transaction-id", fn conn ->
         conn
-        |> Plug.Conn.put_resp_header("server", "daiquiri/3.0.0")
-        |> Plug.Conn.resp(401, "Unauthenticated\n\nRequest ID: PXYVB35MOBBC5TL6UOXY6DGJGY.0.0\n")
+        |> Passby.Conn.put_resp_header("server", "daiquiri/3.0.0")
+        |> Passby.Conn.resp(401, "Unauthenticated\n\nRequest ID: PXYVB35MOBBC5TL6UOXY6DGJGY.0.0\n")
       end)
 
       {:ok, %AppStore.API.Response{body: body, status: status}} =
@@ -27,12 +27,12 @@ defmodule AppStore.API.TransactionHistoryTest do
     test "supports filters", %{bypass: bypass, app_store: app_store} do
       expected_body = %{signedTransactions: [], hasMore: false} |> Jason.encode!()
 
-      Bypass.expect_once(bypass, "GET", "/inApps/v2/history/the-transaction-id", fn conn ->
+      Passby.expect_once(bypass, "GET", "/inApps/v2/history/the-transaction-id", fn conn ->
         assert conn.query_string =~ "productType=AUTO_RENEWABLE"
         assert conn.query_string =~ "productType=CONSUMABLE"
         assert conn.query_string =~ "sort=ASCENDING"
 
-        Plug.Conn.resp(conn, 200, expected_body)
+        Passby.Conn.resp(conn, 200, expected_body)
       end)
 
       {:ok, %AppStore.API.Response{body: body, status: status}} =

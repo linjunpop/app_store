@@ -7,11 +7,11 @@ defmodule AppStore.API.AppTransactionTest do
     test "gets app transaction info", %{bypass: bypass, app_store: app_store} do
       expected_body = %{signedAppTransaction: "signed"} |> Jason.encode!()
 
-      Bypass.expect_once(
+      Passby.expect_once(
         bypass,
         "GET",
         "/inApps/v1/transactions/appTransactions/the-transaction-id",
-        fn conn -> Plug.Conn.resp(conn, 200, expected_body) end
+        fn conn -> Passby.Conn.resp(conn, 200, expected_body) end
       )
 
       {:ok, %AppStore.API.Response{body: body, status: status}} =

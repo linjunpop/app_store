@@ -5,11 +5,11 @@ defmodule AppStore.API.MessagingImageTest do
 
   describe "upload_image/5" do
     test "uploads a PNG image", %{bypass: bypass, app_store: app_store} do
-      Bypass.expect_once(bypass, "PUT", "/inApps/v1/messaging/image/img-id", fn conn ->
+      Passby.expect_once(bypass, "PUT", "/inApps/v1/messaging/image/img-id", fn conn ->
         assert conn.query_string === "imageSize=LARGE"
         assert {"content-type", "image/png"} in conn.req_headers
 
-        Plug.Conn.resp(conn, 200, "")
+        Passby.Conn.resp(conn, 200, "")
       end)
 
       {:ok, %AppStore.API.Response{status: status}} =
@@ -21,8 +21,8 @@ defmodule AppStore.API.MessagingImageTest do
 
   describe "delete_image/3" do
     test "deletes an image", %{bypass: bypass, app_store: app_store} do
-      Bypass.expect_once(bypass, "DELETE", "/inApps/v1/messaging/image/img-id", fn conn ->
-        Plug.Conn.resp(conn, 200, "")
+      Passby.expect_once(bypass, "DELETE", "/inApps/v1/messaging/image/img-id", fn conn ->
+        Passby.Conn.resp(conn, 200, "")
       end)
 
       {:ok, %AppStore.API.Response{status: status}} =
@@ -36,8 +36,8 @@ defmodule AppStore.API.MessagingImageTest do
     test "gets the image list", %{bypass: bypass, app_store: app_store} do
       expected_body = %{images: []} |> Jason.encode!()
 
-      Bypass.expect_once(bypass, "GET", "/inApps/v1/messaging/image/list", fn conn ->
-        Plug.Conn.resp(conn, 200, expected_body)
+      Passby.expect_once(bypass, "GET", "/inApps/v1/messaging/image/list", fn conn ->
+        Passby.Conn.resp(conn, 200, expected_body)
       end)
 
       {:ok, %AppStore.API.Response{body: body, status: status}} =

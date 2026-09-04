@@ -5,12 +5,12 @@ defmodule AppStore.API.MessagingDefaultTest do
 
   describe "configure_default_message/5" do
     test "configures the default message", %{bypass: bypass, app_store: app_store} do
-      Bypass.expect_once(
+      Passby.expect_once(
         bypass,
         "PUT",
         "/inApps/v1/messaging/default/product-id/en-US",
         fn conn ->
-          Plug.Conn.resp(conn, 200, "")
+          Passby.Conn.resp(conn, 200, "")
         end
       )
 
@@ -29,12 +29,12 @@ defmodule AppStore.API.MessagingDefaultTest do
 
   describe "delete_default_message/4" do
     test "deletes the default message", %{bypass: bypass, app_store: app_store} do
-      Bypass.expect_once(
+      Passby.expect_once(
         bypass,
         "DELETE",
         "/inApps/v1/messaging/default/product-id/en-US",
         fn conn ->
-          Plug.Conn.resp(conn, 200, "")
+          Passby.Conn.resp(conn, 200, "")
         end
       )
 
@@ -54,12 +54,12 @@ defmodule AppStore.API.MessagingDefaultTest do
     test "gets the default message", %{bypass: bypass, app_store: app_store} do
       expected_body = %{messageIdentifier: "msg-id", state: "ACTIVE"} |> Jason.encode!()
 
-      Bypass.expect_once(
+      Passby.expect_once(
         bypass,
         "GET",
         "/inApps/v1/messaging/default/product-id/en-US",
         fn conn ->
-          Plug.Conn.resp(conn, 200, expected_body)
+          Passby.Conn.resp(conn, 200, expected_body)
         end
       )
 

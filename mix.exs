@@ -46,7 +46,7 @@ defmodule AppStore.MixProject do
       {:ex_doc, "~> 0.40", only: :dev, runtime: false},
 
       # test
-      {:bypass, "~> 2.1", only: :test},
+      {:passby, "~> 0.2", only: :test},
       {:mox, "~> 1.1", only: :test}
     ]
   end

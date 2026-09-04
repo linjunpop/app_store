@@ -5,14 +5,14 @@ defmodule AppStore.API.ConsumptionInformationTest do
 
   describe "send_consumption_information/4" do
     test "sends consumption information", %{bypass: bypass, app_store: app_store} do
-      Bypass.expect_once(
+      Passby.expect_once(
         bypass,
         "PUT",
         "/inApps/v2/transactions/consumption/the-transaction-id",
         fn conn ->
           conn
-          |> Plug.Conn.put_resp_header("server", "daiquiri/3.0.0")
-          |> Plug.Conn.resp(
+          |> Passby.Conn.put_resp_header("server", "daiquiri/3.0.0")
+          |> Passby.Conn.resp(
             401,
             "Unauthenticated\n\nRequest ID: PXYVB35MOBBC5TL6UOXY6DGJGY.0.0\n"
           )

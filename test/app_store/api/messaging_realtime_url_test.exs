@@ -5,8 +5,8 @@ defmodule AppStore.API.MessagingRealtimeUrlTest do
 
   describe "configure_realtime_url/3" do
     test "configures the realtime url", %{bypass: bypass, app_store: app_store} do
-      Bypass.expect_once(bypass, "PUT", "/inApps/v1/messaging/realtime/url", fn conn ->
-        Plug.Conn.resp(conn, 200, "")
+      Passby.expect_once(bypass, "PUT", "/inApps/v1/messaging/realtime/url", fn conn ->
+        Passby.Conn.resp(conn, 200, "")
       end)
 
       {:ok, %AppStore.API.Response{status: status}} =
@@ -21,8 +21,8 @@ defmodule AppStore.API.MessagingRealtimeUrlTest do
 
   describe "delete_realtime_url/2" do
     test "deletes the realtime url", %{bypass: bypass, app_store: app_store} do
-      Bypass.expect_once(bypass, "DELETE", "/inApps/v1/messaging/realtime/url", fn conn ->
-        Plug.Conn.resp(conn, 200, "")
+      Passby.expect_once(bypass, "DELETE", "/inApps/v1/messaging/realtime/url", fn conn ->
+        Passby.Conn.resp(conn, 200, "")
       end)
 
       {:ok, %AppStore.API.Response{status: status}} =
@@ -36,8 +36,8 @@ defmodule AppStore.API.MessagingRealtimeUrlTest do
     test "gets the realtime url", %{bypass: bypass, app_store: app_store} do
       expected_body = %{url: "https://example.com", environment: "PRODUCTION"} |> Jason.encode!()
 
-      Bypass.expect_once(bypass, "GET", "/inApps/v1/messaging/realtime/url", fn conn ->
-        Plug.Conn.resp(conn, 200, expected_body)
+      Passby.expect_once(bypass, "GET", "/inApps/v1/messaging/realtime/url", fn conn ->
+        Passby.Conn.resp(conn, 200, expected_body)
       end)
 
       {:ok, %AppStore.API.Response{body: body, status: status}} =

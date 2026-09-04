@@ -3,10 +3,10 @@ defmodule AppStore.HTTPClientTest do
 
   describe "get/3" do
     test "Get history", %{bypass: bypass, app_store: app_store} do
-      Bypass.expect_once(bypass, "GET", "/test", fn conn ->
+      Passby.expect_once(bypass, "GET", "/test", fn conn ->
         conn
-        |> Plug.Conn.put_resp_header("server", "daiquiri/3.0.0")
-        |> Plug.Conn.resp(200, "text")
+        |> Passby.Conn.put_resp_header("server", "daiquiri/3.0.0")
+        |> Passby.Conn.resp(200, "text")
       end)
 
       {:ok, %{body: body, status: status}} =

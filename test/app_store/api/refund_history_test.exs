@@ -7,9 +7,9 @@ defmodule AppStore.API.RefundHistoryTest do
     test "gets refund history without a revision", %{bypass: bypass, app_store: app_store} do
       expected_body = %{signedTransactions: [], revision: "rev"} |> Jason.encode!()
 
-      Bypass.expect_once(bypass, "GET", "/inApps/v2/refund/lookup/the-transaction-id", fn conn ->
+      Passby.expect_once(bypass, "GET", "/inApps/v2/refund/lookup/the-transaction-id", fn conn ->
         assert conn.query_string === ""
-        Plug.Conn.resp(conn, 200, expected_body)
+        Passby.Conn.resp(conn, 200, expected_body)
       end)
 
       {:ok, %AppStore.API.Response{body: body, status: status}} =
@@ -24,9 +24,9 @@ defmodule AppStore.API.RefundHistoryTest do
     test "gets refund history with a revision", %{bypass: bypass, app_store: app_store} do
       expected_body = %{signedTransactions: [], revision: "rev2"} |> Jason.encode!()
 
-      Bypass.expect_once(bypass, "GET", "/inApps/v2/refund/lookup/the-transaction-id", fn conn ->
+      Passby.expect_once(bypass, "GET", "/inApps/v2/refund/lookup/the-transaction-id", fn conn ->
         assert conn.query_string === "revision=rev"
-        Plug.Conn.resp(conn, 200, expected_body)
+        Passby.Conn.resp(conn, 200, expected_body)
       end)
 
       {:ok, %AppStore.API.Response{body: body, status: status}} =
